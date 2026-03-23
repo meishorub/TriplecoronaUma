@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Millie´s Page!! :3</title>
+
+    <style>
+        @font-face {
+            font-family: 'SFTSchriftedRoundTRIAL-Medium';
+            src: url('SFTSchriftedRoundTRIAL-Medium.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #ffd1dc 0%, #ffffff 100%);
+            background-attachment: fixed;
+            font-family: 'SFTSchriftedRoundTRIAL-Medium', sans-serif;
+            overflow-x: hidden;
+        }
+
+        #pantalla-inicio {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1s ease, visibility 1s;
+        }
+
+        #boton-play {
+            font-size: 22px;
+            padding: 15px 45px;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            background-color: #ffb6c1;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
+            transition: all 0.5s ease;
+            outline: none;
+            margin-bottom: 20px;
+            font-family: inherit;
+        }
+
+        #boton-play:hover {
+            transform: scale(1.2);
+            background-color: #ff99aa;
+        }
+
+        #contenedor-carga {
+            display: none;
+            width: 300px;
+            text-align: center;
+        }
+
+        .barra-gris {
+            width: 100%;
+            height: 20px;
+            background-color: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #ffb6c1;
+        }
+
+        #barra-progreso {
+            width: 0%;
+            height: 100%;
+            background-color: #ffb6c1;
+            transition: width 0.1s linear;
+        }
+
+        #texto-porcentaje {
+            margin-top: 10px;
+            color: #d87093;
+            font-weight: bold;
+        }
+
+        #contenido-pagina {
+            opacity: 0;
+            display: none;
+            padding: 20px;
+            transition: opacity 1.5s ease;
+        }
+
+        .recuadro-titulo {
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 25px;
+            padding: 40px;
+            margin: 40px auto;
+            max-width: 700px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .enlace-imagen {
+            display: inline-block;
+            text-decoration: none;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .imagen {
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            margin: 10px 10px 5px 10px;
+            display: block;
+            position: relative; 
+            z-index: 1;
+        }
+
+        .borde-suave {
+            border: 5px solid #ffb6c1;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(255, 182, 193, 0.3);
+        }
+
+        .imagen:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            z-index: 10;
+        }
+
+        .texto-indicador {
+            color: #a35e84;
+            font-size: 0.8em;
+            margin: 1px 0 7px 0;
+            display: block;
+            opacity: 0.7;
+            position: relative;
+            z-index: 0;
+            text-align: center;
+        }
+
+        .caja-texto {
+            background-color: white;
+            border: 2px solid #ffb6c1;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 0px auto 20px auto; 
+            max-width: 800px; 
+            width: 90%; 
+            color: #555;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            font-size: 1.2em;
+            overflow-wrap: break-word; 
+            word-wrap: break-word;
+            word-break: normal;
+            line-height: 1.5;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .caja-texto:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(255, 182, 193, 0.2);
+        }
+
+        table {
+            border-collapse: separate; 
+            border-spacing: 10px; 
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        th, td {
+            border: 2px solid lightpink;
+            padding: 10px;
+            background-color: #fefefe;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .ocultar { opacity: 0 !important; visibility: hidden !important; }
+        .mostrar-block { display: block !important; opacity: 1 !important; }
+    </style>
+</head>
+<body>
+
+    <div id="pantalla-inicio">
+        <button id="boton-play">Entrar a la pagina :3</button>
+        <div id="contenedor-carga">
+            <div class="barra-gris">
+                <div id="barra-progreso"></div>
+            </div>
+            <div id="texto-porcentaje">0%</div>
+        </div>
+    </div>
+
+    <audio id="audio-fondo" loop>
+        <source src="chiyonoo.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="contenido-pagina">
+        
+        <div class="recuadro-titulo">
+            <h1 style="color: #d87093; margin: 0;">Bienvenid@ a mi pagina :3</h1>
+            <p style="color: #888; font-size: 1.1em;">apenas estoy empezando, ten piedad qwq</p>
+        </div>
+
+        <div style="text-align: center;">
+            <img class="imagen borde-suave" style="margin: 0 auto;" width="315" height="265" src="umanya.gif">
+            <h5>"¿What is Spe-chan doing to Grass wonder?"</h5>
+            
+            <h1>Mis kenomomimi favoritas :3</h1>
+
+            <h2>1. Sakura Chiyono O</h2>
+            <a href="https://en.wikipedia.org/wiki/Sakura_Chiyono_O" target="_blank" rel="noopener noreferrer" class="enlace-imagen">
+                <img class="imagen borde-suave" width="265" height="265" src="https://i.redd.it/c6nltuci7dvf1.gif">
+            </a>
+            <span class="texto-indicador">click en la imagen para la wiki! :3</span>
+            
+            <div class="caja-texto">
+                <strong>Sakura Chiyono O</strong> fue un legendario purasangre japonés que destacó por su elegancia y su imponente paso en las distancias clásicas durante finales de los años 80. Su legado perdura como un símbolo de perseverancia en los hipódromos más importantes de Japón, y sus victorias de clase G´s en toda su carrera, fueron las siguientes:
+            </div>
+
+            <table>
+                <tr><th>Carreras G1</th><th>Carreras G2</th><th>Carreras G3</th></tr>
+                <tr><td>3</td><td>1</td><td>1</td></tr>
+            </table>
+
+            <h2>2. Haru Urara</h2>
+            <a href="https://es.wikipedia.org/wiki/Haru_Urara" target="_blank" rel="noopener noreferrer" class="enlace-imagen">
+                <img class="imagen borde-suave" width="265" height="265" src="https://media.discordapp.net/attachments/1280760670094098455/1404135059547488358/STK-20250708-WA0009.webp?ex=69bacead&is=69b97d2d&hm=94cce60f786935eb2d2a83cb25e2a4739c6f576c69332c4295b10f2370949fce&=&animated=true">
+            </a>
+            <span class="texto-indicador">click en la imagen para la wiki! :3</span>
+
+            <div class="caja-texto"><strong>Haru Urara</strong> fue una yegua japonesa que se convirtió en un ícono cultural por su inquebrantable perseverancia, ganándose el afecto del público a pesar de no haber logrado ganar ninguna carrera. Su historia es un símbolo de esperanza y tenacidad en el deporte, y sus victorias de clase G´s en toda su carrera, fueron las siguientes:</div>
+
+            <table>
+                <tr><th>Carreras G1</th><th>Carreras G2</th><th>Carreras G3</th></tr>
+                <tr><td>Ninguna :c</td><td>Ninguna twt</td><td>Ninguna qwq</td></tr>
+            </table>
+
+            <h2>3. Meisho Doto</h2>
+            <a href="https://en.wikipedia.org/wiki/Meisho_Doto" target="_blank" rel="noopener noreferrer" class="enlace-imagen">
+                <img class="imagen borde-suave" width="265" height="265" src="https://media.tenor.com/wtj1XQaREnQAAAAM/meisho-doto-dance.gif">
+            </a>
+            <span class="texto-indicador">click en la imagen para la wiki! :3</span>
+
+            <div class="caja-texto"><strong>Meisho Doto</strong>
+Meisho Doto fue un imponente purasangre japonés reconocido por su gran resistencia y su histórica rivalidad con los mejores corredores de su generación a principios de los 2000. Su constancia en los escenarios más exigentes de Japón lo consolidó como un competidor de élite, y sus victorias de clase G´s en toda su carrera, fueron las siguientes:</div>
+
+            <table>
+                <tr><th>Carreras G1</th><th>Carreras G2</th><th>Carreras G3</th></tr>
+                <tr><td>1</td><td>3</td><td>1</td></tr>
+            </table>
+
+            <h2>4. Agnes Tachyon</h2>
+            <a href="https://es.wikipedia.org/wiki/Agnes_Tachyon" target="_blank" rel="noopener noreferrer" class="enlace-imagen">
+                <img class="imagen borde-suave" width="265" height="265" src="https://media1.tenor.com/m/ifD1GaekwpoAAAAC/uma-musume-agnes-tachyon.gif">
+            </a>
+            <span class="texto-indicador">click en la imagen para la wiki! :3</span>
+
+            <div class="caja-texto"><strong>Agnes Tachyon</strong> fue un purasangre japonés de talento excepcional, recordado por su breve pero fulgurante trayectoria en las pistas a principios de los años 2000. Considerado un fenómeno por su velocidad y dominio en la distancia, dejó una marca indeleble en el turf japonés a pesar de su temprana retirada, y sus victorias de clase G´s en toda su carrera, fueron las siguientes:</div>
+
+            <table>
+                <tr><th>Carreras G1</th><th>Carreras G2</th><th>Carreras G3</th></tr>
+                <tr><td>2</td><td>1</td><td>1</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('boton-play');
+            const pantalla = document.getElementById('pantalla-inicio');
+            const contenedorCarga = document.getElementById('contenedor-carga');
+            const barra = document.getElementById('barra-progreso');
+            const textoPorcentaje = document.getElementById('texto-porcentaje');
+            const contenido = document.getElementById('contenido-pagina');
+            const audio = document.getElementById('audio-fondo');
+
+            btn.addEventListener('click', () => {
+                audio.play().catch(err => console.log("Audio esperando interacción"));
+                btn.style.display = 'none';
+                contenedorCarga.style.display = 'block';
+
+                let progreso = 0;
+                const intervalo = setInterval(() => {
+                    progreso += 2;
+                    barra.style.width = progreso + '%';
+                    textoPorcentaje.innerText = progreso + '%';
+
+                    if (progreso >= 100) {
+                        clearInterval(intervalo);
+                        setTimeout(() => {
+                            pantalla.classList.add('ocultar');
+                            contenido.classList.add('mostrar-block');
+                            window.scrollTo(0, 0);
+                        }, 200);
+                    }
+                }, 20);
+            });
+
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
+            window.scrollTo(0, 0);
+        });
+    </script>
+</body>
+</html>
